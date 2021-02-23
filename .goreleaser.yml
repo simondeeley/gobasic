@@ -30,8 +30,8 @@ builds:
         - Merge branch
         - go mod tidy
   archives:
+  - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
     format: tar.gz
-    - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
     replacements:
       darwin: Darwin
       linux: Linux
