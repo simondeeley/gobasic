@@ -2,28 +2,31 @@ language: go
 os: linux
 dist: alpine
 jobs:
-    fast_finish: true
-    include:
-        - go: 1.10.x
-        - go: 1.11.x
-        - go: 1.6.x
-        - go: 1.8.x
-          env: GOFMT=1
-        - go: master
-        - go: tip
-    allow_failures:
-        - go: master
-        - go: tip
+  fast_finish: true
+  include:
+    - go: 1.11.x
+    - go: 1.12.x
+    - go: 1.13.x
+    - go: 1.14.x
+    - go: 1.15.x
+      env: GOFMT=1
+    - go: 1.16.x
+    - go: master
+    - go: tip
+  allow_failures:
+    - go: master
+    - go: tip
 before_install:
-    - export GOMAXPROCS=1
+  - export GOMAXPROCS=1
 script:
-    - go test -v -race $(go list ./... | grep -v vendor)
-    - curl -sfL https://git.io/goreleaser | sh -s -- check
-    - if test -n "${GOFMT}"; then gofmt -w -s . && git diff --exit-code; fi
+  - go test -v -race $(go list ./... | grep -v vendor)
+  - curl -sfL https://git.io/goreleaser | sh -s -- check
+  - if test -n "${GOFMT}"; then gofmt -w -s . && git diff --exit-code; fi
 deploy:
-    - provider: script
-      skip_cleanup: true
-      script: curl -sL https://git.io/goreleaser | bash
-      on:
-        tags: true
-        condition: $GOFMT = 1
+- provider: script
+  skip_cleanup: true
+  script: curl -sL https://git.io/goreleaser | bash
+  on:
+    tags: true
+    branch: main
+    condition: $GOFMT = 1
